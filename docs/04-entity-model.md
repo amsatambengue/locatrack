@@ -16,8 +16,6 @@ Represents a building or real estate asset that can contain one or multiple rent
 
 Main attributes:
 - id
-- reference
-- label
 - name
 - address
 - description
