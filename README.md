@@ -21,8 +21,8 @@ This project is built to:
 ## Tech Stack
 
 ### Backend
-- Java
-- Spring Boot
+- Java 17
+- Spring Boot 3.5.13
 - Spring Web
 - Spring Data JPA
 - Spring Security
@@ -33,7 +33,7 @@ This project is built to:
 - Angular Material
 
 ### Tooling
-- Maven
+- Maven 3.9.11
 - Docker Compose
 - Swagger / OpenAPI
 
