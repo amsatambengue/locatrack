@@ -1,0 +1,16 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: locatrack-postgres
+    environment:
+      POSTGRES_DB: locatrack
+      POSTGRES_USER: locatrack
+      POSTGRES_PASSWORD: locatrack
+    ports:
+      - "5432:5432"
+    volumes:
+      - locatrack_postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+volumes:
+  locatrack_postgres_data:
