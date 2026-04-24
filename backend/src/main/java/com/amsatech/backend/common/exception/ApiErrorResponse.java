@@ -1,0 +1,52 @@
+package com.amsatech.backend.common.exception;
+
+import java.time.Instant;
+import java.util.Map;
+
+public class ApiErrorResponse {
+
+    private Instant timestamp;
+    private int status;
+    private String error;
+    private String message;
+    private Map<String, String> fieldErrors;
+
+    public ApiErrorResponse() {
+    }
+
+    public ApiErrorResponse(Instant timestamp, int status, String error, String message, Map<String, String> fieldErrors) {
+        this.timestamp = timestamp;
+        this.status = status;
+        this.error = error;
+        this.message = message;
+        this.fieldErrors = fieldErrors;
+    }
+
+    public static ApiErrorResponse of(int status, String error, String message) {
+        return new ApiErrorResponse(Instant.now(), status, error, message, null);
+    }
+
+    public static ApiErrorResponse validation(int status, String error, String message, Map<String, String> fieldErrors) {
+        return new ApiErrorResponse(Instant.now(), status, error, message, fieldErrors);
+    }
+
+    public Instant getTimestamp() {
+        return timestamp;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public String getError() {
+        return error;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public Map<String, String> getFieldErrors() {
+        return fieldErrors;
+    }
+}

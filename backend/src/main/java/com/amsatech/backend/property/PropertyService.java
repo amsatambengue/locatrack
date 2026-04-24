@@ -28,7 +28,7 @@ public class PropertyService {
 
     public PropertyResponse findById(Long id) {
         Property property = propertyRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Property not found: " + id));
+                .orElseThrow(() -> new NotFoundException("Property not found, property ID is " + id));
 
         return propertyMapper.toResponse(property);
     }
@@ -41,7 +41,7 @@ public class PropertyService {
 
     public PropertyResponse update(Long id, PropertyRequest request) {
         Property existingProperty = propertyRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Property not found: " + id));
+                .orElseThrow(() -> new NotFoundException("Property not found, property ID is " + id));
 
         propertyMapper.updateEntity(existingProperty, request);
         Property savedProperty = propertyRepository.save(existingProperty);
