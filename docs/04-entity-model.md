@@ -56,6 +56,7 @@ Main attributes:
 - lastName
 - phone
 - email
+- active
 - idNumber
 - createdAt
 
@@ -67,8 +68,8 @@ Represents the lifecycle of a rental relationship between one tenant and one uni
 
 Main attributes:
 - id
-- tenantId
-- unitId
+- tenant
+- unit
 - startDate
 - endDate
 - monthlyRent
@@ -77,6 +78,23 @@ Main attributes:
 - notes
 - createdAt
 - updatedAt
+
+Lease status:
+- DRAFT : initial state, create but nit yet active
+- ACTIVE: lease is in progress
+- TERMINATED: lease has ended successfully
+- CANCELLED: lease has been cancelled
+
+Authorized lease case status transitions;
+- DRAFT -> ACTIVE
+- DRAFT -> CANCELLED
+- ACTIVE -> TERMINATED
+- ACTIVE -> CANCELLED
+
+To avoid because reactivating a historic lease case create problems quick.
+When a lease case is active again, it is considered a new lease case:
+- TERMINATED -> ACTIVE
+- CANCELLED -> ACTIVE
 
 ---
 
@@ -120,14 +138,15 @@ Examples:
 ### 7. LeaseStatusHistory
 
 Represents the history of lease status changes.
+Append-only trace of status changes
 
 Main attributes:
 - id
 - leaseCaseId
-- oldStatus
-- newStatus
+- fromStatus
+- toStatus
 - changedAt
-- comment
+- reason
 
 ---
 
