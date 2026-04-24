@@ -1,5 +1,6 @@
 package com.amsatech.backend.property;
 
+import com.amsatech.backend.common.exception.NotFoundException;
 import com.amsatech.backend.property.dto.PropertyRequest;
 import com.amsatech.backend.property.dto.PropertyResponse;
 import com.amsatech.backend.property.mapper.PropertyMapper;
@@ -27,7 +28,7 @@ public class PropertyService {
 
     public PropertyResponse findById(Long id) {
         Property property = propertyRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Property not found: " + id));
+                .orElseThrow(() -> new NotFoundException("Property not found: " + id));
 
         return propertyMapper.toResponse(property);
     }
@@ -40,7 +41,7 @@ public class PropertyService {
 
     public PropertyResponse update(Long id, PropertyRequest request) {
         Property existingProperty = propertyRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Property not found: " + id));
+                .orElseThrow(() -> new NotFoundException("Property not found: " + id));
 
         propertyMapper.updateEntity(existingProperty, request);
         Property savedProperty = propertyRepository.save(existingProperty);
