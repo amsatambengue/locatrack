@@ -142,7 +142,7 @@ Append-only trace of status changes
 
 Main attributes:
 - id
-- leaseCaseId
+- leaseCase
 - fromStatus
 - toStatus
 - changedAt
