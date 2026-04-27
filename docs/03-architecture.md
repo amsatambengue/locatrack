@@ -83,6 +83,7 @@ The backend follows a layered architecture:
 - **Repository**: handles database access
 - **Entity**: represents persistence models
 - **DTO**: defines request and response contracts
+- **Mapper**: maps inputs and output responses to dto 
 
 This separation helps keep the code:
 - readable

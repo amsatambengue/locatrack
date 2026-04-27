@@ -1,51 +1,126 @@
 # LocaTrack
 
-**LocaTrack** is a fullstack lease and tenant management application designed to demonstrate a clean and modular architecture using **Spring Boot** and **Angular**.
+**LocaTrack** is a fullstack rental management system designed to model a realistic lease lifecycle with a clean and modular backend architecture.
 
-The project focuses on a realistic property rental workflow:
-- property management
-- tenant management
-- lease case tracking
-- payment follow-up
-- document handling
-- status history
+## Code Domain
+The system models a rental workflow:
 
-## Goals
+- Properties contain Units
+- Tenants rent Units
+- LeaseCases represent contractual occupation
+- Lease status is lifecycle-driven and fully traceable
 
-This project is built to:
-- strengthen fullstack architecture foundations
-- demonstrate backend and frontend best practices
-- model a realistic business workflow with clear domain boundaries
-- provide a clean and credible public GitHub project
+## Key Design Decisions
+1. Modular Monolith (not microservices)
+The backend is structured by domain (property, unit, tenant, lease), avoiding premature microservices complexity.
+
+2. LeaseCase is not CRUD-driven
+
+LeaseCase is treated as a domain entity with lifecycle rules:
+
+- created as DRAFT
+- activated via explicit domain action
+- cannot be modified arbitrarily
+
+Status transitions are controlled:
+- DRAFT → ACTIVE → TERMINATED
+- DRAFT → CANCELLED
+
+3. Rent Snapshot Strategy
+
+When a LeaseCase is created:
+
+LeaseCase.monthlyRent = Unit.monthlyRent (at creation time)
+
+This ensures:
+
+- historical consistency
+- no dependency on future Unit changes
+
+4. Unit Availability Constraint
+   
+A Unit cannot have more than one ACTIVE LeaseCase at the same time.
+
+This is enforced:
+
+* at service level (business validation)
+* at database level (safety)
+
+5. Append-only Status History
+
+Lease status changes are tracked in a dedicated table:
+
+* no updates
+* no deletes
+* full traceability
+
+6. No Direct Entity Exposure
+
+The API uses DTOs and mappers:
+* entities are not exposed directly
+* contracts are controlled and stable
+
 
 ## Tech Stack
 
 ### Backend
 - Java 17
-- Spring Boot 3.5.13
+- Spring Boot 3.5
 - Spring Web
 - Spring Data JPA
-- Spring Security
 - PostgreSQL
 
 ### Frontend
 - Angular
-- Angular Material
 
 ### Tooling
 - Maven 3.9.11
 - Docker Compose
 - Swagger / OpenAPI
 
-## Current Scope
+## How to Run
+1. Start database
 
-The first version focuses on:
-- properties
-- tenants
-- lease cases
-- payments
-- documents
-- workflow status tracking
+`docker compose up -d
+`
+
+2. Run backend
+
+  ` cd backend
+   mvn spring-boot:run`
+
+Backend runs on: http://localhost:8080
+
+
+## API Overview
+
+Main endpoints:
+
+`/api/v1/properties`
+
+`/api/v1/units`
+
+`/api/v1/tenants`
+
+`/api/v1/lease-cases`
+
+Lease-specific endpoints:
+
+`POST /lease-cases/{id}/status-changes`
+
+`GET /lease-cases/{id}/status-history`
+
+## Project Scope (V1)
+* Property management
+* Unit management
+* Tenant management
+* Lease lifecycle management
+
+Out of scope (for now):
+* authentication
+* payments
+* documents
+* notifications
 
 ## Project Documentation
 
