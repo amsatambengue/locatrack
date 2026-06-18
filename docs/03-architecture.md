@@ -11,15 +11,17 @@ LocaTrack is designed as a **modular monolith** with a clear separation between:
 The system is intentionally kept simple in terms of deployment, while maintaining clear domain boundaries and internal modularity.
 
 ```mermaid
-flowchart LR
+flowchart TD
     UI["Angular Frontend<br/>(Planned)"]
 
     subgraph API["LocaTrack Backend — Spring Boot"]
+        direction TB
+
         CTRL["REST Controllers"]
         DTO["DTOs & Validation"]
-        ERR["Centralized Error Handling"]
 
         subgraph MODULES["Business Modules"]
+            direction LR
             PROPERTY["Property"]
             TENANT["Tenant"]
             LEASE["Lease Case"]
@@ -30,15 +32,20 @@ flowchart LR
         DATA["Spring Data JPA<br/>Pagination"]
     end
 
+    ERR["Centralized Error Handling<br/>(Cross-cutting)"]
     DB[("PostgreSQL")]
 
     UI --> CTRL
     CTRL --> DTO
     DTO --> MODULES
-    ERR -. Cross-cutting .-> CTRL
     MODULES --> DATA
     DATA --> DB
+
+    ERR -.-> CTRL
+    ERR -.-> DTO
+    ERR -.-> MODULES
 ```
+
 The frontend communicates with the backend through REST APIs. Requests are validated and mapped through DTOs before reaching the business modules, while persistence is handled through Spring Data JPA and PostgreSQL. Cross-cutting concerns such as error handling are managed centrally.
 
 ---
